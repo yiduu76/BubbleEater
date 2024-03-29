@@ -7,4 +7,9 @@
 script = ExtResource("1_7gf8s")
 
 [node name="Myrigidclass" type="RigidBody2D" parent="."]
+position = Vector2(160, 96)
+continuous_cd = 2
+max_contacts_reported = 2
+contact_monitor = true
 script = ExtResource("2_0qqvp")
+is_player = true

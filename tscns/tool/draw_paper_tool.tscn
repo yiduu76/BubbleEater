@@ -1,3 +1,10 @@
-[gd_scene format=3 uid="uid://b6a2tn8jj3yjy"]
+[gd_scene load_steps=2 format=3 uid="uid://b6a2tn8jj3yjy"]
+
+[ext_resource type="Script" path="res://tscns/tool/scripts/draw_paper_tool.gd" id="1_urqjh"]
 
 [node name="DrawPaperTool" type="Node2D"]
+position = Vector2(160, 96)
+script = ExtResource("1_urqjh")
+
+[node name="Polygon2D" type="Polygon2D" parent="."]
+polygon = PackedVector2Array(8, -8, -8, -8, -8, 8, 8, 8)
