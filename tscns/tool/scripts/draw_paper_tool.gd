@@ -1,8 +1,8 @@
 extends Node2D
-@export var save_path:String="res://assets/polys/defultpoly.res"
+@export var save_path:String="res://assets/polys/cricel.res"
 
 func _ready() -> void:
-	#($Polygon2D as Polygon2D).polygon=spawn_cricle_points(8,32)
+	($Polygon2D as Polygon2D).polygon=spawn_cricle_points(8,128)
 	save_poly()
 
 func save_poly():
