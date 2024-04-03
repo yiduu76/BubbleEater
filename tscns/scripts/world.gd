@@ -16,9 +16,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		(window as Window).position.x+=event.relative.x
 		(window as Window).position.y+=event.relative.y
 func add_randdom_rigid():
-	for i in 1400:
+	for i in 900:
 		var rand_health=randf_range(1,80)
 		var temp_rigid=Myrigidclass.new()
 		temp_rigid.health=rand_health
 		add_child(temp_rigid)
-		temp_rigid.global_translate(Vector2(randi_range(-2100,2100),randi_range(-2000,2000)))
+		temp_rigid.global_translate(Vector2(randi_range(-1400,1400),randi_range(-1400,1400)))

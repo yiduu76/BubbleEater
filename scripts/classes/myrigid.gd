@@ -6,6 +6,7 @@ class_name Myrigidclass
 @export var floating_health :float = 0.0
 @onready var my_cammera=null
 @onready var my_label:Label=null
+@onready var my_poly : Polygon2D=null
 
 func _ready() -> void:
 	set_collision_layer_value(2,true)
@@ -15,24 +16,24 @@ func _ready() -> void:
 	contact_monitor=true
 	max_contacts_reported=2
 	add_poly()
-	add_label()
 	body_entered.connect(_on_body_entered)
 	body_exited.connect(_on_body_exited)
 	if is_player:
 		add_camerra()
-
+		add_label()
 func add_label():
 	my_label=Label.new()
 	add_child(my_label)
 	my_label.add_theme_color_override("font_color",Color.BLACK)
 	my_label.add_theme_font_size_override("font_size",health)
-	my_label.position=-my_label.get_rect().end/2
 	my_label.z_index=2
+	await get_tree().create_timer(0.1).timeout
+	my_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 func update_label():
-	#my_label.position=-my_label.get_rect().end
-	my_label.add_theme_font_size_override("font_size",health)
-	my_label.position=-my_label.get_rect().end/2
-	pass
+	my_label.text=str(health).left(5)
+	my_label.add_theme_font_size_override("font_size",health*0.5)
+	my_label.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
+	my_label.add_theme_color_override("font_color",my_poly.color.inverted())
 
 func add_camerra():
 	my_cammera=Camera2D.new()
@@ -41,7 +42,6 @@ func add_camerra():
 
 func _physics_process(_delta: float) -> void:
 	_move()
-	my_label.text=str(health).left(4)
 	if is_player:
 		camera_control()
 		update_label()
@@ -68,18 +68,18 @@ func _process(_delta: float) -> void:
 		pass
 	
 func _on_body_entered(body:Myrigidclass):
-	if body.is_player:
-		constant_force=(body.global_position-global_position).normalized()*10
-		await get_tree().create_timer(0.5).timeout
-		constant_force=Vector2.ZERO
-	
 	if health>body.health:
-		floating_health=body.health/70.0
+		floating_health=body.health/120.0
+	elif health==body.health:
+		floating_health=0
 	else :
-		floating_health=-health/35.0
+		floating_health=-health/120.0
+	await get_tree().create_timer(2.05).timeout
+	floating_health=0
 
 func _on_body_exited(body:Myrigidclass):
-	floating_health=0
+	pass
+	#floating_health=0
 
 func _move():
 	var temp_dir=Input.get_vector("ui_left","ui_right","ui_up","ui_down")
@@ -103,15 +103,15 @@ func clear_all_poly_coly():
 
 func add_poly() -> void:
 	for i in (my_shape as Mypolyresourceclass).polys:
-		var new_poly=Polygon2D.new()
-		new_poly.polygon=return_poly_with_health(i,health)
-		add_child(new_poly)
+		my_poly=Polygon2D.new()
+		my_poly.polygon=return_poly_with_health(i,health)
+		add_child(my_poly)
 		var color_s=clampf(health/360.0,0,1.0)
 		var color_v=clampf(1-health/360.0,0,1.0)
 		var color_h=clampf(health,0,360.0)
-		new_poly.color.s=color_s
-		new_poly.color.v=color_v
-		new_poly.color.h=color_h
+		my_poly.color.s=color_s
+		my_poly.color.v=color_v
+		my_poly.color.h=color_h
 		
 func add_collision() -> void:
 	for i in (my_shape as Mypolyresourceclass).polys:
